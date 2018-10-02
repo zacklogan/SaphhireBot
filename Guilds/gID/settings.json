@@ -1,0 +1,6 @@
+{
+  "logchannel": (logchannelID),
+  "staffbotchannel": (staffbotID),
+  "debug": false,
+  "debugchannel": (debugchannelID)
+}
