@@ -1,0 +1,13 @@
+{
+  "logchannel": "",
+  "users": {
+    "(uID)": {
+      "warns": {
+        "(caselogID)": {
+          "issuer": "(issuerID)",
+          "reason": "(issuerReason)"
+        }
+      }
+    },
+  }
+}
