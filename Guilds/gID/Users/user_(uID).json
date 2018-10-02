@@ -1,0 +1,9 @@
+{
+  "warns": {
+    "(caselogID)": {
+      "issuer": "(issuerID)",
+      "reason": "(reason)",
+      "date": "(Date)",
+      "removed": false
+    }
+}
