@@ -1,4 +1,4 @@
-namespace Daddy.Database
+namespace SapphireBot.Json
 {
     public class JSON
     {
@@ -21,52 +21,10 @@ namespace Daddy.Database
             return JsonConvert.SerializeObject(collectionWrapper, Formatting.Indented);
         }
 
-        public static string GetToken()
+        public static string GetGuildLogChannel(IGuild guild)
         {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["Token"];
-        }
-
-        public static string GetHelp1()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["Help1"];
-        }
-
-        public static string GetHelp2()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["Help2"];
-        }
-
-        public static string GetApiKeyG()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["api_key_giphy"];
-        }
-
-        public static string GetApiKeydb()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["api_key_danbooru"];
-        }
-
-        public static string GetApiNamedb()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["api_name_danbooru"];
-        }
-
-        public static string Gete621()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["api_name_e621"];
-        }
-
-        public static string Getdbo()
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"_bot/token.json"));
-            return obj["api_dbo"];
+            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"Guilds/{guild.Id}/settings.json"));
+            return obj["logchannel"];
         }
 
         public bool _permNR(ICommandContext context, Commands cmd) => CheckPermChn(context.Guild, context.Channel.Id, cmd);
