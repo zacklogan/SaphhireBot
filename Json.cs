@@ -53,7 +53,7 @@ namespace SapphireBot.Json
                 {
                     Dictionary<string, Dictionary<User, object>> userjson = new Dictionary<string, Dictionary<User, object>>
                         {
-                            { "info", _bc.inUser }
+                            { "info", { User.Shekels, 100 }, { User.Bank, 50 }, { User.Storage, 1 } }}
                         };
                     File.WriteAllText($@"users/user_{id}.json", JsonConvert.SerializeObject(userjson, Formatting.Indented));
                 }
