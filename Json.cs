@@ -21,78 +21,16 @@ namespace SapphireBot.Json
             return JsonConvert.SerializeObject(collectionWrapper, Formatting.Indented);
         }
 
-        public static string GetGuildLogChannel(IGuild guild)
-        {
-            Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText($@"Guilds/{guild.Id}/settings.json"));
-            return obj["logchannel"];
-        }
-
-        public bool _permNR(ICommandContext context, Commands cmd) => CheckPermChn(context.Guild, context.Channel.Id, cmd);
-
-        public async Task<bool> _permWR(ICommandContext context, Commands cmd)
-        {
-            bool dispatch = CheckPermChn(context.Guild, context.Channel.Id, cmd);
-            if (!dispatch) await context.Channel.SendMessageAsync($"Admin removed this command [Channel:<#{context.Channel.Id}>]");
-            return dispatch;
-        }
-
-        public bool CheckPermChn(IGuild guild, ulong id, Commands cmd)
-        {
-            Modules.BaseCommands _bc = new Modules.BaseCommands();
-            Main.Program._client.Guilds.ToList().ForEach(async x => {
-                if (!File.Exists($@"json/jayson_{x.Id}.json") && x.Id.Equals(guild.Id)) {
-                    IEnumerable<IGuildChannel> channels = (await guild.GetChannelsAsync()).Where(y => y is SocketTextChannel).ToList().OrderBy(y => y.Position);
-                    Dictionary<ulong, Dictionary<Commands, bool>> perm = new Dictionary<ulong, Dictionary<Commands, bool>>();
-                    channels.ToList().ForEach(z => perm.Add(z.Id, _bc.inPerm));
-                    File.WriteAllText($@"json/jayson_{guild.Id}.json", JsonConvert.SerializeObject(perm, Formatting.Indented));
-                }
-            });
-            if (JsonConvert.DeserializeObject<Dictionary<ulong, Dictionary<Commands, bool>>>(File.ReadAllText($@"json/jayson_{guild.Id}.json")).TryGetValue(id, out Dictionary<Commands, bool> dispatch)) {
-                if (dispatch.TryGetValue(cmd, out bool dispatch2)) {
-                    return dispatch2;
-                }
-                else
-                {
-                    Dictionary<ulong, Dictionary<Commands, bool>> _parm = JsonConvert.DeserializeObject<Dictionary<ulong, Dictionary<Commands, bool>>>(File.ReadAllText($@"json/jayson_{guild.Id}.json"));
-                    _parm.TryAdd(id, _bc.inPerm);
-                    File.WriteAllText($@"json/jayson_{guild.Id}.json", JsonConvert.SerializeObject(_parm, Formatting.Indented));
-                    if (_parm[id].TryGetValue(cmd, out bool tf)) {
-                        return tf;
-                    }
-                    else {
-                        _parm[id].TryAdd(cmd, _bc.inPerm.Where(x => x.Key.Equals(cmd)).Select(x => x.Value).Single());
-                        File.WriteAllText($@"json/jayson_{guild.Id}.json", JsonConvert.SerializeObject(_parm, Formatting.Indented));
-                        return _bc.inPerm.Where(x => x.Key.Equals(cmd)).Select(x => x.Value).Single();
-                    }
-                }
-            }
-            else
-            {
-                Dictionary<ulong, Dictionary<Commands, bool>> _parm = JsonConvert.DeserializeObject<Dictionary<ulong, Dictionary<Commands, bool>>>(File.ReadAllText($@"json/jayson_{guild.Id}.json"));
-                _parm.TryAdd(id, _bc.inPerm);
-                File.WriteAllText($@"json/jayson_{guild.Id}.json", JsonConvert.SerializeObject(_parm, Formatting.Indented));
-                if (_parm[id].TryGetValue(cmd, out bool tf)) {
-                    return tf;
-                }
-                else {
-                    _parm[id].TryAdd(cmd, _bc.inPerm.Where(x => x.Key.Equals(cmd)).Select(x => x.Value).Single());
-                    File.WriteAllText($@"json/jayson_{guild.Id}.json", JsonConvert.SerializeObject(_parm, Formatting.Indented));
-                    return _bc.inPerm.Where(x => x.Key.Equals(cmd)).Select(x => x.Value).Single();
-                }
-            }
-        }
-
         public string Settings(IGuild guild, Settings stg)
         {
-            Modules.BaseCommands _bc = new Modules.BaseCommands();
             try {
-                Main.Program._client.Guilds.ToList().ForEach(x => {
-                    if (!File.Exists($@"Settings/settings_{x.Id}.json") && x.Id.Equals(guild.Id)) {
-                        Dictionary<string, Dictionary<Settings, object>> welcome = new Dictionary<string, Dictionary<Settings, object>>
+                Program._client.Guilds.ToList().ForEach(x => {
+                    if (!File.Exists($@"Guilds/{x.Id}/settings.json") && x.Id.Equals(guild.Id)) {
+                        Dictionary<string, Dictionary<Settings, object>> settings = new Dictionary<string, Dictionary<Settings, object>>
                         {
-                            { "Settings", _bc.inWelcome }
+                            { "logchannel", "" },
                         };
-                        File.WriteAllText($@"Settings/settings_{guild.Id}.json", JsonConvert.SerializeObject(welcome, Formatting.Indented));
+                        File.WriteAllText($@"Guilds/{guild.Id}settings.json", JsonConvert.SerializeObject(welcome, Formatting.Indented));
                     }
                 });
                 Dictionary<string, Dictionary<Settings, object>> _json = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<Settings, object>>>(File.ReadAllText($@"Settings/settings_{guild.Id}.json"));
